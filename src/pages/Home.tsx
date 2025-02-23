@@ -3,11 +3,8 @@ import { Button } from "@/components/ui/button";
 import { BookOpen, Sparkles, Target } from "lucide-react";
 import { useNavigate, Link } from "react-router";
 import landingBackground from '@/images/landing-background.jpg';
-// import Button from '../components/common/Button';
 
 export const Home = () => {
-  const navigate = useNavigate();
-
 
   return  (
     <main className="relative min-h-screen">
