@@ -3,7 +3,7 @@ import PromptWheel from "@/components/PromptWheel";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { genrePrompts } from "@/components/PromptWheel";
-import createStoryBackground from "@/images/create-story-background.jpg";
+import createStoryBackground from "@/images/create-story-bg.jpg";
 
 const genres = ["Adventure", "Sci-Fi", "Mystery", "Fairy Tale"] as const;
 type Genre = keyof typeof genrePrompts;
@@ -41,7 +41,7 @@ export default function CreateStory() {
             <img
               src={createStoryBackground}
               alt="Hero background"
-              className="object-cover w-full h-full"
+              className="object-cover w-full h-full object-center"
               loading="eager"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />

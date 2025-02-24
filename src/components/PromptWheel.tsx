@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 
 export const genrePrompts = {
@@ -218,7 +216,7 @@ const PromptWheel = ({ genre }: PromptWheelProps) => {
         </div>
 
         {/* Main content */}
-        <div className="relative mr-36">
+        <div className="relative mr-48">
           <div className="relative">
             {prompts.map((prompt, index) => renderPrompt(prompt, index))}
           </div>
