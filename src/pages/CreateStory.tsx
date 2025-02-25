@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PromptWheel from "@/components/PromptWheel";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader } from "lucide-react";
@@ -6,6 +6,7 @@ import { genrePrompts } from "@/components/PromptWheel";
 import createStoryBackground from "@/images/create-story-bg.jpg";
 import { StoryService } from "@/lib/api";
 import { SciFiPromptAnswers } from "@/lib/templates";
+import { cn } from "@/lib/utils";
 
 const genres = ["Adventure", "Sci-Fi", "Mystery", "Fairy Tale"] as const;
 type Genre = keyof typeof genrePrompts;
@@ -16,6 +17,7 @@ export default function CreateStory() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedStory, setGeneratedStory] = useState<{ title: string; content: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showGenerateButton, setShowGenerateButton] = useState(false);
 
   const handleAnswersUpdate = (updatedAnswers: Record<string, string>) => {
     setAnswers(updatedAnswers);
@@ -25,6 +27,11 @@ export default function CreateStory() {
   const isAllPromptsAnswered = promptsForGenre.every(prompt => 
     answers[prompt.id] && answers[prompt.id].trim().length > 0
   );
+
+  // Update button visibility when all prompts are answered
+  useEffect(() => {
+    setShowGenerateButton(isAllPromptsAnswered);
+  }, [isAllPromptsAnswered]);
 
   const handleGenerateStory = async () => {
     try {
@@ -120,21 +127,6 @@ export default function CreateStory() {
               </Button>
             ))}
           </div>
-          <Button 
-            className="rounded-full"
-            onClick={handleGenerateStory}
-            disabled={!isAllPromptsAnswered || isGenerating}
-          >
-            {isGenerating ? (
-              <>
-                <Loader className="mr-2 h-4 w-4 animate-spin" /> Generating...
-              </>
-            ) : (
-              <>
-                <ArrowRight className="mr-2 h-4 w-4" /> Generate Story
-              </>
-            )}
-          </Button>
         </div>
       </div>
 
@@ -168,6 +160,32 @@ export default function CreateStory() {
           genre={selectedGenre} 
           onAnswersUpdate={handleAnswersUpdate}
         />
+        
+        {/* Floating Generate Story button that appears when all prompts are answered */}
+        <div 
+          className={cn(
+            "fixed right-40 bottom-1/3 transform -translate-y-1/2 z-50 transition-all duration-300",
+            showGenerateButton ? "translate-x-0 opacity-100" : "translate-x-20 opacity-0"
+          )}
+        >
+          <Button 
+            className="px-6 py-6 text-lg rounded-full bg-gradient-to-r from-indigo-700 to-indigo-400 border border-white shadow-lg hover:shadow-xl transition-all text-white
+            hover:scale-110 hover:shadow-[0_0_20px_rgba(99,102,241,0.7)] hover:border-opacity-80 transform transition-transform duration-300"
+            onClick={handleGenerateStory}
+            disabled={isGenerating}
+            size="lg"
+          >
+            {isGenerating ? (
+              <>
+                <Loader className="mr-3 h-5 w-5 animate-spin" /> Generating...
+              </>
+            ) : (
+              <>
+                Generate Story <ArrowRight className="ml-3 h-5 w-5" />
+              </>
+            )}
+          </Button>
+        </div>
       </div>
     </div>
   );
