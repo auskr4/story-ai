@@ -164,7 +164,7 @@ export default function CreateStory() {
         {/* Floating Generate Story button that appears when all prompts are answered */}
         <div 
           className={cn(
-            "fixed right-40 bottom-1/3 transform -translate-y-1/2 z-50 transition-all duration-300",
+            "fixed right-40 bottom-1/4 transform -translate-y-1/2 z-50 transition-all duration-300",
             showGenerateButton ? "translate-x-0 opacity-100" : "translate-x-20 opacity-0"
           )}
         >
