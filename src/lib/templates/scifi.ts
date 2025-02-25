@@ -8,6 +8,8 @@ export interface SciFiPromptAnswers {
   ability: string;
   discovery: string;
   fear: string;
+  characterName: string;
+  characterDetails: string;
 }
 
 /**
@@ -19,16 +21,18 @@ You are a science fiction author specializing in creating immersive, character-d
 Create a compelling science fiction story based on the following information:
 
 Setting: ${answers.setting}
+Character Name: ${answers.characterName}
+Character Details: ${answers.characterDetails}
 Character's Technological Ability: ${answers.ability}
 Scientific Discovery: ${answers.discovery}
 Character's Fear: ${answers.fear}
 
 Story Structure Guidelines:
-- Opening: Establish the technological/scientific context and introduce the main character with their unique ability
-- Inciting Incident: A technological problem/discovery that only someone with the character's specific ability could handle
+- Opening: Establish the technological/scientific context and introduce ${answers.characterName} with their unique ability
+- Inciting Incident: A technological problem/discovery that only someone with ${answers.characterName}'s specific ability could handle
 - Rising Action: Complexity increases as the science/tech implications expand
-- Climax: Character must use their ability in an unexpected way
-- Resolution: Show how the event changes the character's world/understanding
+- Climax: ${answers.characterName} must use their ability in an unexpected way
+- Resolution: Show how the event changes ${answers.characterName}'s world/understanding
 
 Technology Level Guidelines:
 - All technology should feel consistent with the character's described abilities

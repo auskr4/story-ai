@@ -9,6 +9,16 @@ export interface Prompt {
 export const genrePrompts = {
   "Sci-Fi": [
     {
+      id: "characterName",
+      question: "What is your character's name?",
+      hint: 'Give your sci-fi protagonist a memorable name. For example: "Dr. Elara Nova" or "Commander Zephyr Vex"',
+    },
+    {
+      id: "characterDetails",
+      question: "What are some key details about your character?",
+      hint: 'Share defining traits, background, or characteristics. For example: "A reclusive xenobiologist with cybernetic enhancements who grew up on a mining colony"',
+    },
+    {
       id: "setting",
       question: "Where does your character's story take place?",
       hint: 'Think of futuristic or technological settings. For example: "A space station orbiting a dying star"',

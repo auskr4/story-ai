@@ -38,6 +38,8 @@ export default function CreateStory() {
           ability: answers.ability || "",
           discovery: answers.discovery || "",
           fear: answers.fear || "",
+          characterName: answers.characterName || "",
+          characterDetails: answers.characterDetails || "",
         };
         
         const result = await StoryService.generateSciFiStory(sciFiAnswers);
