@@ -1,4 +1,10 @@
-import { useState } from "react"
+import { useState, ChangeEvent, MouseEvent } from "react"
+
+export interface Prompt {
+  id: string;
+  question: string;
+  hint: string;
+}
 
 export const genrePrompts = {
   "Sci-Fi": [
@@ -48,13 +54,14 @@ export const genrePrompts = {
 
 interface PromptWheelProps {
   genre: keyof typeof genrePrompts;
+  onAnswersUpdate?: (answers: Record<string, string>) => void;
 }
 
-const PromptWheel = ({ genre }: PromptWheelProps) => {
+const PromptWheel = ({ genre, onAnswersUpdate }: PromptWheelProps) => {
   const prompts = genrePrompts[genre]
   const [currentPromptIndex, setCurrentPromptIndex] = useState(0)
-  const [answers, setAnswers] = useState({})
-  const [hoveredIndex, setHoveredIndex] = useState(null)
+  const [answers, setAnswers] = useState<Record<string, string>>({})
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   const handleNext = () => {
     if (answers[prompts[currentPromptIndex].id]?.trim()) {
@@ -62,21 +69,28 @@ const PromptWheel = ({ genre }: PromptWheelProps) => {
     }
   }
 
-  const handleAnswerChange = (e) => {
+  const handleAnswerChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const currentPromptId = prompts[currentPromptIndex].id
-    setAnswers((prev) => ({
-      ...prev,
+    const updatedAnswers = {
+      ...answers,
       [currentPromptId]: e.target.value,
-    }))
+    }
+    
+    setAnswers(updatedAnswers)
+    
+    // Notify parent component about the updated answers
+    if (onAnswersUpdate) {
+      onAnswersUpdate(updatedAnswers)
+    }
   }
 
-  const handlePromptClick = (index) => {
+  const handlePromptClick = (index: number) => {
     if (index !== currentPromptIndex) {
       setCurrentPromptIndex(index)
     }
   }
 
-  const renderPrompt = (prompt, index) => {
+  const renderPrompt = (prompt: Prompt, index: number) => {
     const position = index - currentPromptIndex
 
     let containerClass = "transition-all duration-500 w-full max-w-2xl mx-auto mb-4 relative "
