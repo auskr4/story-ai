@@ -48,3 +48,46 @@ export default tseslint.config({
   },
 })
 ```
+
+## API and Template System
+
+The application now includes an API integration with OpenAI to generate stories based on user inputs using a template system.
+
+### Setup
+
+1. Copy `.env.example` to `.env`:
+   ```
+   cp .env.example .env
+   ```
+
+2. Edit `.env` and add your OpenAI API key:
+   ```
+   VITE_OPENAI_API_KEY=your_actual_key_here
+   ```
+
+### How It Works
+
+1. **Templates**: The system uses templates to format user inputs into prompts for the LLM.
+   - Templates are defined by genre in `src/lib/templates/`
+   - SciFi templates are currently implemented, with a structure for adding other genres
+
+2. **API Services**: OpenAI integration is handled through service classes:
+   - `OpenAIService`: Interacts directly with OpenAI API
+   - `StoryService`: Combines templates with API calls to generate stories
+
+3. **User Flow**:
+   - User selects a genre and answers prompt questions
+   - System uses answers to fill a template
+   - Template is sent to OpenAI to generate a story
+   - Generated story is displayed to the user
+
+### Extending the System
+
+To add support for new genres:
+
+1. Create a new template file in `src/lib/templates/` (e.g., `mystery.ts`)
+2. Define the prompt answers interface and template generator function
+3. Add the new genre to the `TemplateMap` in `src/lib/templates/index.ts`
+4. Update the `StoryService` to support the new genre
+
+Future plans include support for AI-generated illustrations.
