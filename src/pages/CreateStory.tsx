@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 import PromptWheel from "@/components/PromptWheel";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader } from "lucide-react";
@@ -7,15 +8,16 @@ import createStoryBackground from "@/images/create-story-bg.jpg";
 import { StoryService } from "@/lib/api";
 import { SciFiPromptAnswers } from "@/lib/templates";
 import { cn } from "@/lib/utils";
+import { CONFIG, TEST_STORY } from "@/lib/config";
 
 const genres = ["Adventure", "Sci-Fi", "Mystery", "Fairy Tale"] as const;
 type Genre = keyof typeof genrePrompts;
 
 export default function CreateStory() {
+  const navigate = useNavigate();
   const [selectedGenre, setSelectedGenre] = useState<Genre>("Sci-Fi");
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedStory, setGeneratedStory] = useState<{ title: string; content: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showGenerateButton, setShowGenerateButton] = useState(false);
 
@@ -38,6 +40,21 @@ export default function CreateStory() {
       setIsGenerating(true);
       setError(null);
       
+      // If test mode is enabled, skip the API call and use the test story
+      if (CONFIG.testMode) {
+        // Simulate API call delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Navigate to preview with test data
+        navigate("/story-preview", { 
+          state: {
+            title: TEST_STORY.title,
+            content: TEST_STORY.content,
+          }
+        });
+        return;
+      }
+      
       // Only handle Sci-Fi for now, as per the requirements
       if (selectedGenre === "Sci-Fi") {
         const sciFiAnswers: SciFiPromptAnswers = {
@@ -51,9 +68,12 @@ export default function CreateStory() {
         
         const result = await StoryService.generateSciFiStory(sciFiAnswers);
         
-        setGeneratedStory({
-          title: result.title || "Untitled SciFi Story",
-          content: result.story,
+        // Instead of setting state, navigate to preview page with story data
+        navigate("/story-preview", { 
+          state: {
+            title: result.title || "Untitled SciFi Story",
+            content: result.story,
+          }
         });
       } else {
         // For future implementation of other genres
@@ -66,49 +86,6 @@ export default function CreateStory() {
       setIsGenerating(false);
     }
   };
-
-  const handleReturnToPrompts = () => {
-    setGeneratedStory(null);
-  };
-
-  // Display the generated story if available
-  if (generatedStory) {
-    return (
-      <div className="min-h-screen pt-16 p-4 md:p-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-            <div className="p-6 md:p-8">
-              <Button 
-                variant="outline" 
-                onClick={handleReturnToPrompts}
-                className="mb-4"
-              >
-                ← Back to Prompts
-              </Button>
-              
-              <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center text-indigo-900">
-                {generatedStory.title}
-              </h1>
-              
-              <div className="prose prose-indigo max-w-none">
-                {generatedStory.content.split('\n').map((paragraph, idx) => {
-                  // Skip the title which is already displayed above
-                  if (idx === 0 && paragraph.trim() === generatedStory.title) {
-                    return null;
-                  }
-                  return paragraph.trim() ? (
-                    <p key={idx} className="mb-4">{paragraph}</p>
-                  ) : (
-                    <br key={idx} />
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen">
