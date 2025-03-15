@@ -94,7 +94,7 @@ export default function StoryPreview() {
                 ))}
                 
                 {/* Fade-out effect container that overlaps the text */}
-                <div className="absolute inset-0 top-[-180px] bg-gradient-to-b from-transparent via-white/50 to-white pointer-events-none" />
+                <div className="absolute inset-0 top-[-220px] bg-gradient-to-b from-transparent via-white/50 to-white pointer-events-none" />
                 
                 <div className="text-center py-12 relative z-10 mt-4">
                   <div className="flex flex-col items-center justify-center space-y-4">

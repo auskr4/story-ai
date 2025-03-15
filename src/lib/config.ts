@@ -5,7 +5,7 @@
 // Toggle this flag to enable/disable test mode
 // When enabled, the app will use mock data instead of making API calls
 export const CONFIG = {
-  testMode: true, // Set to false in production
+  testMode: false, // Set to false in production
 };
 
 // Sample story for test mode
